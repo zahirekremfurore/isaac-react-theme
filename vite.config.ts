@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import path from "path"
 import react from "@vitejs/plugin-react";
 import { keycloakify } from "keycloakify/vite-plugin";
 
@@ -8,6 +9,13 @@ export default defineConfig({
         react(),
         keycloakify({
             accountThemeImplementation: "none"
-        })
-    ]
+        }),
+    ],
+    resolve: {
+        alias: {
+          "@": path.resolve(__dirname, "./src"),
+        },
+      },
 });
+
+
