@@ -6,6 +6,7 @@ import DefaultPage from "keycloakify/login/DefaultPage";
 import { Template as CustomTemplate } from "./Template";
 import Error from "./pages/Error";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 const UserProfileFormFields = lazy(() => import("./UserProfileFormFields"));
 
 // Base component to render DefaultPage
@@ -368,18 +369,18 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     //             doUseDefaultCss={true}
                     //         />
                     //     );
-                    // case "register.ftl":
-                    //     return (
-                    //         <Register
-                    //             kcContext={kcContext}
-                    //             i18n={i18n}
-                    //             classes={classescustom}
-                    //             Template={CustomTemplate}
-                    //             doUseDefaultCss={true}
-                    //             UserProfileFormFields={UserProfileFormFields} // Pass the required UserProfileFormFields prop
-                    //             doMakeUserConfirmPassword={true} // or false, depending on your requirement
-                    //         />
-                    //     );
+                    case "register.ftl":
+                        return (
+                            <Register
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classescustom}
+                                Template={CustomTemplate}
+                                doUseDefaultCss={true}
+                                UserProfileFormFields={UserProfileFormFields} // Pass the required UserProfileFormFields prop
+                                doMakeUserConfirmPassword={true} // or false, depending on your requirement
+                            />
+                        );
                     case "login.ftl":
                         return (
                             <Login
