@@ -8,6 +8,7 @@ import type { I18n } from "../i18n";
 import { Button, buttonVariants } from "../../components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 type RegisterProps = PageProps<Extract<KcContext, { pageId: "register.ftl" }>, I18n> & {
     UserProfileFormFields: LazyOrNot<(props: UserProfileFormFieldsProps) => JSX.Element>;
     doMakeUserConfirmPassword: boolean;
@@ -62,7 +63,7 @@ export default function Register(props: RegisterProps) {
                         </div>
                     </div>
                 )}
-                <div className="  ">
+                <div className="mt-2  ">
                     <div className="m-2">
 
                         <a href={url.loginUrl} className={cn(buttonVariants({ variant: "link" }), "underline p-1  hover:bg-slate-50 ")}>
@@ -115,9 +116,9 @@ function TermsAcceptance(props: {
                             onCheckedChange={e => onAreTermsAcceptedValueChange(Boolean(e))}
                             aria-invalid={messagesPerField.existsError("termsAccepted")}
                         />
-                        <label htmlFor="termsAccepted" className={kcClsx("kcLabelClass")}>
+                        <Label htmlFor="termsAccepted" className={kcClsx("kcLabelClass")}>
                             {msg("acceptTerms")}
-                        </label>
+                        </Label>
                     </div>
                 </div>
                 {messagesPerField.existsError("termsAccepted") && (

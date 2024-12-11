@@ -10,6 +10,7 @@ import type { KcContext } from "./KcContext";
 import { Button } from "../components/ui/button";
 import { ModeToggle } from "../components/ui/mode-toggle";
 import { Card, CardContent } from "../components/ui/card";
+import { kcSanitize } from "keycloakify/lib/kcSanitize";
 import "../index.css";
 
 import {
@@ -19,7 +20,7 @@ import {
     DropdownMenuItem,
 
 } from "../components/ui/dropdown-menu";
-import { WholeWordIcon } from "lucide-react";
+import { Globe, WholeWordIcon } from "lucide-react";
 
 export function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -83,7 +84,7 @@ export function Template(props: TemplateProps<KcContext, I18n>) {
                                         className="px-3 py-0"
                                     >
                                         <div className="flex space-x-2">
-                                            <WholeWordIcon className="h-5 w-5" />
+                                        <Globe className="h-5 w-5" />
                                             <span>{currentLanguage.label}</span>
                                         </div>
                                     </Button>
@@ -121,7 +122,7 @@ export function Template(props: TemplateProps<KcContext, I18n>) {
                     <header className="text-center  ">
                         {(() => {
                             const node = !(auth !== undefined && auth.showUsername && !auth.showResetCredentials) ? (
-                                <h1 id="kc-page-title">{headerNode}</h1>
+                                <h1 className="text-2xl font-bold" id="kc-page-title">{headerNode}</h1>
                             ) : (
                                 <div id="kc-username" className={kcClsx("kcFormGroupClass")}>
                                     <label id="kc-attempted-username">{auth.attemptedUsername}</label>
@@ -171,7 +172,7 @@ export function Template(props: TemplateProps<KcContext, I18n>) {
                                     <span
                                         className="text-sm"
                                         dangerouslySetInnerHTML={{
-                                            __html: message.summary
+                                            __html: kcSanitize(message.summary)
                                         }}
                                     />
                                 </div>

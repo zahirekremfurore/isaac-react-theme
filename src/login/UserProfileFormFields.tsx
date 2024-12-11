@@ -15,6 +15,15 @@ import { Input } from "../components/ui/input";
 
 import { PasswordWrapper } from "../components/ui/PasswordWrapper";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Label } from "@/components/ui/label";
+
 /**
  * Renders each form field by looping through formFieldStates:
  *
@@ -60,7 +69,7 @@ export default function UserProfileFormFields(props: UserProfileFormFieldsProps<
         <div className="prose dark:prose-invert ">
             {formFieldStates.map(({ attribute, displayableErrors, valueOrValues }) => {
                 return (
-                    <div className=" my-5">
+                    <div className="my-12">
                         <Fragment key={attribute.name}>
                             <GroupLabel attribute={attribute} groupNameRef={groupNameRef} i18n={i18n} kcClsx={kcClsx} />
                             {BeforeField !== undefined && (
@@ -495,10 +504,10 @@ function InputTagSelects(props: InputFieldByTypeProps) {
     })();
 
     return (
-        <>
+        <div className="flex items-center gap-2">
             {options.map(option => (
-                <div key={option} className={classDiv}>
-                    <input
+                <div key={option} className="flex items-center gap-2">
+                    <Input
                         type={inputType}
                         id={`${attribute.name}-${option}`}
                         name={attribute.name}
@@ -538,15 +547,15 @@ function InputTagSelects(props: InputFieldByTypeProps) {
                             })
                         }
                     />
-                    <label
+                    <Label
                         htmlFor={`${attribute.name}-${option}`}
-                        className={`${classLabel}${attribute.readOnly ? ` ${kcClsx("kcInputClassRadioCheckboxLabelDisabled")}` : ""}`}
+                        className={`${classLabel}${attribute.readOnly ? ` ${kcClsx("kcInputClassRadioCheckboxLabelDisabled")}` : "cursor-pointer capitalize font-bold"}`} 
                     >
                         {advancedMsg(option)}
-                    </label>
+                    </Label>
                 </div>
             ))}
-        </>
+        </div>
     );
 }
 

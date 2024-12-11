@@ -1,8 +1,7 @@
-import { useState, useEffect, useReducer } from "react";
-import { assert } from "keycloakify/tools/assert";
+import { useState } from "react";
 import { clsx } from "keycloakify/tools/clsx";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
-import { getKcClsx, type KcClsx } from "keycloakify/login/lib/kcClsx";
+import { getKcClsx } from "keycloakify/login/lib/kcClsx";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { Button } from "../../components/ui/button";
@@ -13,6 +12,8 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { Separator } from "../../components/ui/separator";
 import { PasswordWrapper } from "../../components/ui/PasswordWrapper";
 import SocialProviders from "../../components/ui/SocialProviders";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 export default function Login(props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
 
@@ -26,6 +27,9 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
     const { msg, msgStr } = i18n;
 
     const [isLoginButtonDisabled, setIsLoginButtonDisabled] = useState(false);
+    const [email, setEmail] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     return (
         <Template
@@ -36,16 +40,17 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
             displayMessage={!messagesPerField.existsError("username", "password")}
             headerNode={msg("loginAccountTitle")}
             displayInfo={realm.password && realm.registrationAllowed && !registrationDisabled}
-            infoNode={
-                <div id="kc-registration" className="">
-                    <span className="text-foreground text-xl">
-                        {msgStr("noAccount")}{" "}
-                        <a tabIndex={8} href={url.registrationUrl} className="mx-5 link-style ">
-                            {msgStr("doRegister")}
-                        </a>
-                    </span>
-                </div>
-            }
+            
+            // infoNode={
+            //     <div id="kc-registration" className="">
+            //         <span className="text-foreground text-xl">
+            //             {msgStr("noAccount")}{" "}
+            //             <a tabIndex={8} href={url.registrationUrl} className="mx-5 link-style ">
+            //                 {msgStr("doRegister")}
+            //             </a>
+            //         </span>
+            //     </div>
+            // }
             socialProvidersNode={<SocialProviders social={social as any} kcClsx={kcClsx} clsx={clsx} msg={msg} realm={realm} />}
         >
             <div id="kc-form">
@@ -53,7 +58,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                     {realm.password && (
                         <form
                             id="kc-form-login"
-                            onSubmit={() => {
+                            onSubmit={e => {
+                                // e.preventDefault();
                                 setIsLoginButtonDisabled(true);
                                 return true;
                             }}
@@ -125,16 +131,10 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 <div>
                                     {realm.rememberMe && !usernameHidden && (
                                         <div className="flex items-center space-x-2 ">
-                                            <Checkbox
-                                                tabIndex={5}
-                                                id="rememberMe"
-                                                name="rememberMe"
-                                                defaultChecked={!!login.rememberMe}
-                                            />
-                                                <Label htmlFor="rememberMe" className="text-md cursor-pointer">
+                                            <Checkbox tabIndex={5} id="rememberMe" name="rememberMe" defaultChecked={!!login.rememberMe} />
+                                            <Label htmlFor="rememberMe" className="text-md cursor-pointer">
                                                 {msgStr("rememberMe")}
-                                                 </Label>
-                            
+                                            </Label>
                                         </div>
                                     )}
                                 </div>
@@ -160,6 +160,81 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                         </form>
                     )}
                 </div>
+                {realm.password && realm.registrationAllowed && !registrationDisabled && (
+                    <div className="mt-6">
+                        {emailError && (
+                            <Alert variant="destructive">
+                                <AlertCircle className="h-4 w-4" />
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>{emailError}</AlertDescription>
+                            </Alert>
+                        )}
+                        <form
+                            onSubmit={async e => {
+                                e.preventDefault();
+                                setIsLoading(true);
+                                setEmailError("");
+                                try {
+                                    console.log({ email,url : `${url.registrationUrl}?email=${encodeURIComponent(email)}` })
+                                    alert(`${url.registrationUrl}?email=${encodeURIComponent(email)}`)
+                                    setEmailError("Email already exists.");
+                                    window.location.href = `${url.registrationUrl}`
+                                    // Email validation API call
+                                    // const response = await fetch(`${kcContext.url.resourcesPath}/check-email`, {
+                                    //     method: "POST",
+                                    //     headers: {
+                                    //         "Content-Type": "application/json"
+                                    //     },
+                                    //     body: JSON.stringify({ email })
+                                    // });
+
+                                    // const data = await response.json();
+
+                                    // if (data.exists) {
+                                    //     setEmailError("Email already exists.");
+                                    // } else {
+                                    //     // Redirect to registration page with email
+                                    //     window.location.href = `${url.registrationUrl}?email=${encodeURIComponent(email)}`;
+                                    // }
+                                } catch (error) {
+                                    setEmailError("An error occurred. Please try again.");
+                                } finally {
+                                    setIsLoading(false);
+                                }
+
+                                // Handle form submission
+                            }}
+                        >
+                            <div className="space-y-4">
+                                <div>
+                                    <h3 className="text-lg font-semibold">{msgStr("noAccount")}</h3>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="email" className="cursor-pointer">
+                                        {msg("email")}
+                                    </Label>
+                                    <Input
+                                        type="email"
+                                        id="email"
+                                        name="emailAddress"
+                                        maxLength={75}
+                                        value={email}
+                                        onChange={e => setEmail(e.target.value)}
+                                        disabled={isLoading}
+                                        aria-invalid={!!emailError}
+                                    />
+                                </div>
+
+                                <div>
+                                    <Button type="submit" className="w-full">
+                                        {msg("doContinue")}
+                                    </Button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                )}
             </div>
         </Template>
     );
