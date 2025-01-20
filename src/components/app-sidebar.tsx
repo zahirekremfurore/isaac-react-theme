@@ -28,20 +28,20 @@ export function AppSidebar({
     const { msg, msgStr, currentLanguage, enabledLanguages } = i18n;
 
     const keycloakLinks = [
-        { id: "account", label: "Account", url: kcContext.url.accountUrl },
-        { id: "password", label: "Password", url: kcContext.url.passwordUrl },
-        { id: "totp", label: "Authenticator", url: kcContext.url.totpUrl },
+        { id: "account", label: msg("account"), url: kcContext.url.accountUrl },
+        { id: "password", label: msg("password"), url: kcContext.url.passwordUrl },
+        { id: "totp", label: msg("authenticator"), url: kcContext.url.totpUrl },
         {
             id: "social",
-            label: "Identity Providers",
+            label: msg("federatedIdentity"),
             url: kcContext.url.socialUrl,
             feature: kcContext.features?.identityFederation
         },
-        // { id: 'sessions', label: 'Sessions', url: kcContext.url.sessionsUrl, feature: kcContext.features?.sessions },
-        // { id: 'applications', label: 'Applications', url: kcContext.url.applicationsUrl, feature: kcContext.features?.applications },
+        { id: 'sessions', label: msg('sessions'), url: kcContext.url.sessionsUrl },
+        { id: 'applications', label: msg('applications'), url: kcContext.url.applicationsUrl, },
         {
             id: "log",
-            label: "Account Access",
+            label: msg("log"),
             url: kcContext.url.logUrl,
             feature: kcContext.features?.log
         }
@@ -69,7 +69,7 @@ export function AppSidebar({
                                     <SidebarMenuItem key={link.id}>
                                         <SidebarMenuButton
                                             asChild
-                                            className="data-[active=true]:bg-primary/95 data-[active=true]:text-sidebar-accent-foreground"
+                                            className="data-[active=true]:bg-primary/95 data-[active=true]:font-medium data-[active=true]:border-r-2 data-[active=true]:border-primary data-[active=true]:text-sidebar-accent-foreground"
                                             isActive={
                                                 kcContext.pageId === `${link.id}.ftl`
                                             }

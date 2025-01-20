@@ -110,9 +110,11 @@ export function Template(props: TemplateProps<KcContext, I18n>) {
     };
     return (
         <div className="bg-background  min-h-screen   flex flex-col items-center justify-center  prose dark:prose-invert max-w-none">
-            <div id="kc-header-wrapper" className="text-center text-foreground hide md:visible">
-                {msgStr("loginTitleHtml", realm.displayNameHtml)}
-            </div>
+            {/* <div dangerouslySetInnerHTML={{
+                __html: kcSanitize(msgStr("loginTitleHtml", realm.displayNameHtml))
+            }} id="kc-header-wrapper" className="text-center text-foreground hide md:visible">
+               
+            </div> */}
             <Card className="py-0 px-3  md:-[40rem] shadow-2xl w-full min-h-screen  md:w-[30rem] sm:min-h-fit ">
                 <CardContent className="space-y-8 pb-5 ">
                     <div className="flex justify-end space-x-4 pt-2">

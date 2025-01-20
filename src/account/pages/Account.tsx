@@ -1,9 +1,7 @@
 import { clsx } from "keycloakify/tools/clsx";
 import type { PageProps } from "keycloakify/account/pages/PageProps";
-import { getKcClsx } from "keycloakify/account/lib/kcClsx";
 import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
-import { TemplateProps } from "keycloakify/account/TemplateProps";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,10 +15,7 @@ export default function Account(props: PageProps<Extract<KcContext, { pageId: "a
         kcBodyClass: clsx(props.classes?.kcBodyClass, "user")
     };
 
-    const { kcClsx } = getKcClsx({
-        doUseDefaultCss,
-        classes
-    });
+    
 
     const {
         url,

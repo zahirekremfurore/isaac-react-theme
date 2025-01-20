@@ -10,6 +10,8 @@ import { Template } from "./Template";
 import Account from "./pages/Account";
 import Password from "./pages/Password";
 import Totp from "./pages/Totp";
+import Sessions from "./pages/Sessions";
+import Applications from "./pages/Applications";
 // import Template from "keycloakify/account/Template";
 
 export default function KcPage(props: { kcContext: KcContext }) {
@@ -27,6 +29,10 @@ export default function KcPage(props: { kcContext: KcContext }) {
                         return <Password kcContext={kcContext} i18n={i18n} classes={classes} Template={Template} doUseDefaultCss={true} />;
                     case "totp.ftl":
                         return <Totp kcContext={kcContext} i18n={i18n} classes={classes} Template={Template} doUseDefaultCss={true} />;
+                    case "sessions.ftl":
+                        return <Sessions kcContext={kcContext} i18n={i18n} classes={classes} Template={Template} doUseDefaultCss={true} />;
+                    case "applications.ftl":
+                        return <Applications kcContext={kcContext} i18n={i18n} classes={classes} Template={Template} doUseDefaultCss={true} />;
                     default:
                         return <DefaultPage kcContext={kcContext} i18n={i18n} classes={classes} Template={Template} doUseDefaultCss={true} />;
                 }

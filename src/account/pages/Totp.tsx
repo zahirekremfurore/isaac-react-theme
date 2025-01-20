@@ -4,6 +4,7 @@ import type { KcContext } from "../KcContext";
 import type { I18n } from "../i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp.ftl" }>, I18n>) {
     const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
@@ -11,6 +12,11 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
     const { totp, mode, url, messagesPerField, stateChecker } = kcContext;
 
     const { msg } = i18n;
+
+    console.log("TOTP Enabled: ", totp.enabled);
+    console.log("TOTP Secret: ", totp.totpSecretEncoded);
+    console.log("TOTP QR Code: ", totp.totpSecretQrCode);
+    console.log("TOTP kcContext: ", kcContext);
 
     return (
         <Template {...{ kcContext, i18n, doUseDefaultCss, classes }} active="totp">
@@ -52,14 +58,14 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
                                 {msg("totpStep1")}
                                 <ul className="list-disc list-inside ml-4 mt-2">
                                     {totp.supportedApplications.map(app => (
-                                        <li key={app}>{app}</li>
+                                        <li key={app}>{msg(app as any)}</li>
                                     ))}
                                 </ul>
                             </li>
                             <li>
                                 {msg("totpStep2")}
                                 <div className="mt-2">
-                                    <img src={totp.totpSecretQrCode} alt="QR code" />
+                                    <img src={`data:image/png;base64,${totp.totpSecretQrCode}`} alt="QR code" />
                                 </div>
                                 <div className="mt-2">
                                     <Button variant="link" onClick={() => (window as any).location.href = mode === "qr" ? url.totpUrl : `${url.totpUrl}?mode=manual`}>
@@ -81,9 +87,9 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
 
                         <div className="space-y-4">
                             <div>
-                                <label htmlFor="totp" className="text-sm font-medium">
+                                <Label htmlFor="totp" className="text-sm font-medium">
                                     {msg("authenticatorCode")}
-                                </label>
+                                </Label>
                                 <Input
                                     type="text"
                                     id="totp"
@@ -100,9 +106,9 @@ export default function Totp(props: PageProps<Extract<KcContext, { pageId: "totp
                             </div>
 
                             <div>
-                                <label htmlFor="totpSecret" className="text-sm font-medium">
+                                <Label htmlFor="totpSecret" className="text-sm font-medium">
                                     {msg("totpDeviceName")}
-                                </label>
+                                </Label>
                                 <Input
                                     type="text"
                                     id="totpSecret"

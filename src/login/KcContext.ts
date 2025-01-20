@@ -9,6 +9,27 @@ export type KcContextExtension = {
     // See: https://docs.keycloakify.dev/faq-and-help/some-values-you-need-are-missing-from-in-kccontext
 };
 
-export type KcContextExtensionPerPage = {};
+export type KcContextExtensionPerPage = {
+    // NOTE: Here you can declare more properties to extend the KcContext
+    // See: https://docs.keycloakify.dev/faq-and-help/some-values-you-need-are-missing-from-in-kccontext
+    "otp-form.ftl": {
+        auth: {
+            attemptedUsername: string;
+        };
+        url: {
+            loginRestartFlowUrl: string;
+            loginAction: string;
+        };
+    };
+    "config-sms.ftl": {
+        auth: {
+            attemptedUsername: string;
+        };
+        url: {
+            loginRestartFlowUrl: string;
+            loginAction: string;
+        };
+    };
+};
 
 export type KcContext = ExtendKcContext<KcContextExtension, KcContextExtensionPerPage>;

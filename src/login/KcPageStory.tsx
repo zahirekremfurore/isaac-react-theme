@@ -11,7 +11,26 @@ const kcContextExtension: KcContextExtension = {
         ...kcEnvDefaults
     }
 };
-const kcContextExtensionPerPage: KcContextExtensionPerPage = {};
+const kcContextExtensionPerPage: KcContextExtensionPerPage = {
+    "otp-form.ftl": {
+        auth: {
+            attemptedUsername: "user@user.com"
+        },
+        url: {
+            loginRestartFlowUrl: "#",
+            loginAction: "#"
+        }
+    },
+    "config-sms.ftl": {
+        auth: {
+            attemptedUsername: "user@user.com"
+        },
+        url: {
+            loginRestartFlowUrl: "#",
+            loginAction: "#"
+        }
+    }
+};
 
 export const { getKcContextMock } = createGetKcContextMock({
     kcContextExtension,

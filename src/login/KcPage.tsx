@@ -7,6 +7,11 @@ import { Template as CustomTemplate } from "./Template";
 import Error from "./pages/Error";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import OtpForm from "./pages/OtpForm";
+import ConfigSms from "./pages/ConfigSms";
+import LoginResetPassword from "./pages/LoginResetPassword";
+import ConfigTotp from "./pages/ConfigTotp";
+import LoginUpdateProfile from "./pages/LoginUpdateProfile";
 const UserProfileFormFields = lazy(() => import("./UserProfileFormFields"));
 
 // Base component to render DefaultPage
@@ -21,7 +26,7 @@ const Base = ({
 }) => {
     return (
         <DefaultPage
-            kcContext={kcContext}
+            kcContext={kcContext as any}
             i18n={i18n}
             classes={classes}
             Template={CustomTemplate}
@@ -34,10 +39,14 @@ const Base = ({
 
 const doMakeUserConfirmPassword = true;
 
+
 export default function KcPage(props: { kcContext: KcContext }) {
     const { kcContext } = props;
 
     const { i18n } = useI18n({ kcContext });
+
+    console.log("PAGE ID: ", kcContext.pageId);
+    console.log("KC CONTEXT: ", kcContext);
 
     return (
         <Suspense>
@@ -175,18 +184,18 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     //             doUseDefaultCss={true}
                     //         />
                     //     );
-                    // case "login-update-profile.ftl":
-                    //     return (
-                    //         <LoginUpdateProfile
-                    //             kcContext={kcContext}
-                    //             i18n={i18n}
-                    //             classes={classescustom}
-                    //             Template={CustomTemplate}
-                    //             doUseDefaultCss={true}
-                    //             UserProfileFormFields={UserProfileFormFields} // Pass the required UserProfileFormFields prop
-                    //             doMakeUserConfirmPassword={true} // or false, depending on your requirement
-                    //         />
-                    //     );
+                    case "login-update-profile.ftl":
+                        return (
+                            <LoginUpdateProfile
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classescustom}
+                                Template={CustomTemplate}
+                                doUseDefaultCss={true}
+                                UserProfileFormFields={UserProfileFormFields} // Pass the required UserProfileFormFields prop
+                                doMakeUserConfirmPassword={true} // or false, depending on your requirement
+                            />
+                        );
                     // case "login-update-password.ftl":
                     //     return (
                     //         <LoginUpdatePassword
@@ -197,16 +206,16 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     //             doUseDefaultCss={true}
                     //         />
                     //     );
-                    // case "login-reset-password.ftl":
-                    //     return (
-                    //         <LoginResetPassword
-                    //             kcContext={kcContext}
-                    //             i18n={i18n}
-                    //             classes={classescustom}
-                    //             Template={CustomTemplate}
-                    //             doUseDefaultCss={true}
-                    //         />
-                    //     );
+                    case "login-reset-password.ftl":
+                        return (
+                            <LoginResetPassword
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classescustom}
+                                Template={CustomTemplate}
+                                doUseDefaultCss={true}
+                            />
+                        );
                     // case "login-reset-otp.ftl":
                     //     return (
                     //         <LoginResetOtp
@@ -237,16 +246,16 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     //             doUseDefaultCss={true}
                     //         />
                     //     );
-                    // case "login-otp.ftl":
-                    //     return (
-                    //         <LoginOtp
-                    //             kcContext={kcContext}
-                    //             i18n={i18n}
-                    //             classes={classescustom}
-                    //             Template={CustomTemplate}
-                    //             doUseDefaultCss={true}
-                    //         />
-                    //     );
+                    case "login-otp.ftl":
+                        return (
+                            <OtpForm
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classescustom}
+                                Template={CustomTemplate}
+                                doUseDefaultCss={true}
+                            />
+                        );
                     // case "login-oauth-grant.ftl":
                     //     return (
                     //         <LoginOauthGrant
@@ -277,16 +286,16 @@ export default function KcPage(props: { kcContext: KcContext }) {
                     //             doUseDefaultCss={true}
                     //         />
                     //     );
-                    // case "login-config-totp.ftl":
-                    //     return (
-                    //         <LoginConfigTotp
-                    //             kcContext={kcContext}
-                    //             i18n={i18n}
-                    //             classes={classescustom}
-                    //             Template={CustomTemplate}
-                    //             doUseDefaultCss={true}
-                    //         />
-                    //     );
+                    case "login-config-totp.ftl":
+                        return (
+                            <ConfigTotp
+                                kcContext={kcContext}
+                                i18n={i18n}
+                                classes={classescustom}
+                                Template={CustomTemplate}
+                                doUseDefaultCss={true}
+                            />
+                        );
                     // case "info.ftl":
                     //     return (
                     //         <Info
@@ -391,6 +400,22 @@ export default function KcPage(props: { kcContext: KcContext }) {
                                 doUseDefaultCss={true}
                             />
                         );
+                        // case "otp-form.ftl":
+                        //     return (
+                        //         <OtpForm
+                        //             {...{ kcContext, i18n, classes }}
+                        //             Template={CustomTemplate}
+                        //             doUseDefaultCss={true}
+                        //         />
+                        //     );
+                            case "config-sms.ftl":
+                                return (
+                                    <ConfigSms
+                                        {...{ kcContext, i18n, classes }}
+                                        Template={CustomTemplate}
+                                        doUseDefaultCss={true}
+                                    />
+                                );
 
                     default:
                         return (

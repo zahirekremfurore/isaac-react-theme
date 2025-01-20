@@ -1,4 +1,4 @@
-import { useEffect, useReducer, Fragment } from "react";
+import { useEffect, useReducer, Fragment, useState } from "react";
 import { assert } from "keycloakify/tools/assert";
 import type { KcClsx } from "keycloakify/login/lib/kcClsx";
 import {
@@ -15,14 +15,9 @@ import { Input } from "../components/ui/input";
 
 import { PasswordWrapper } from "../components/ui/PasswordWrapper";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { getPhoneData, PhoneInput } from "@/components/ui/phone-input";
 
 /**
  * Renders each form field by looping through formFieldStates:
@@ -266,6 +261,8 @@ function InputFieldByType(props: InputFieldByTypeProps) {
         case "select-radiobuttons":
         case "multiselect-checkboxes":
             return <InputTagSelects {...props} />;
+        case "html5-tel":
+            return <PhoneInputTag {...props} />;
         default: {
             if (valueOrValues instanceof Array) {
                 return (
@@ -319,6 +316,12 @@ function InputTag(props: InputFieldByTypeProps & { fieldIndex: number | undefine
 
                     assert(typeof valueOrValues === "string");
 
+                    if (attribute.name === "email") {
+                        const params = new URLSearchParams(window.location.search);
+                        const emailFromUrl = params.get("email");
+                        return emailFromUrl ?? valueOrValues;
+                    }
+                
                     return valueOrValues;
                 })()}
                 // className={kcClsx("kcInputClass")}
@@ -549,7 +552,7 @@ function InputTagSelects(props: InputFieldByTypeProps) {
                     />
                     <Label
                         htmlFor={`${attribute.name}-${option}`}
-                        className={`${classLabel}${attribute.readOnly ? ` ${kcClsx("kcInputClassRadioCheckboxLabelDisabled")}` : "cursor-pointer capitalize font-bold"}`} 
+                        className={`${classLabel}${attribute.readOnly ? ` ${kcClsx("kcInputClassRadioCheckboxLabelDisabled")}` : "cursor-pointer capitalize font-bold"}`}
                     >
                         {advancedMsg(option)}
                     </Label>
@@ -680,5 +683,59 @@ function SelectTag(props: InputFieldByTypeProps) {
                 ));
             })()}
         </select>
+    );
+}
+
+function PhoneInputTag(props: InputFieldByTypeProps) {
+    const { attribute, dispatchFormAction, kcClsx, displayableErrors, i18n, valueOrValues } = props;
+
+    const { advancedMsgStr } = i18n;
+
+    const [phoneError, setPhoneError] = useState("");
+
+    return (
+        <div className="flex flex-col gap-2">
+        <PhoneInput
+            id={attribute.name}
+            name={attribute.name}
+            // className={kcClsx("kcInputClass")}
+            aria-invalid={displayableErrors.length !== 0}
+            disabled={attribute.readOnly}
+            defaultCountry="NL"
+            size={attribute.annotations.inputTypeSize === undefined ? undefined : parseInt(`${attribute.annotations.inputTypeSize}`)}
+            value={valueOrValues as string}
+            onChange={event => {
+                const _getPhoneData = getPhoneData(event);
+                if (_getPhoneData.isValid) {
+                    setPhoneError("");
+                    dispatchFormAction({
+                        action: "update",
+                        name: attribute.name,
+                        valueOrValues: (() => {
+                            return _getPhoneData.internationalNumber as string;
+                        })()
+                    });
+                } else {
+                    setPhoneError("Invalid phone number");
+                    // set error
+                    // dispatchFormAction({
+                    //     action: "error",
+                    //     name: attribute.name,
+                    //     error: "Invalid phone number"
+                    // });
+
+                }
+                    
+            }}
+            onBlur={() =>
+                dispatchFormAction({
+                    action: "focus lost",
+                    name: attribute.name,
+                    fieldIndex: undefined
+                })
+            }
+        />
+        {phoneError && <span className="text-danger">{phoneError}</span>}
+        </div>
     );
 }

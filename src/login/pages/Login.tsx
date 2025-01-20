@@ -175,10 +175,8 @@ export default function Login(props: PageProps<Extract<KcContext, { pageId: "log
                                 setIsLoading(true);
                                 setEmailError("");
                                 try {
-                                    console.log({ email,url : `${url.registrationUrl}?email=${encodeURIComponent(email)}` })
-                                    alert(`${url.registrationUrl}?email=${encodeURIComponent(email)}`)
                                     setEmailError("Email already exists.");
-                                    window.location.href = `${url.registrationUrl}`
+                                    window.location.href = `${url.registrationUrl}&email=${encodeURIComponent(email)}`
                                     // Email validation API call
                                     // const response = await fetch(`${kcContext.url.resourcesPath}/check-email`, {
                                     //     method: "POST",
